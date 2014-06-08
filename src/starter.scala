@@ -52,7 +52,6 @@ object starter extends App {
 	  }
 	  
 	  def main_problem11 = {
-		  val max = 2000000
 		  val startTime = System.currentTimeMillis()
 		  println( "Largest product equals " + problem11(Problem11.Data, 20, 20, 4) )
 		  val endTime = System.currentTimeMillis()
@@ -60,7 +59,28 @@ object starter extends App {
 	      println(dur + " msecs")
 	  }
 	  
-	  main_problem11
+	  def main_problem12 = {
+		  def problem12(required:Int): Long = {
+		    def divisors(no:Long, cur:Long) : Int = if (cur>no/2) 2 else if (no%cur==0) divisors(no, cur+1) +1 else divisors(no, cur+1)
+		    
+		    def triangle(cur:Long, next:Long) : Long = 
+		      {
+		    		val d = divisors(cur, 2)
+		    		println("triangle no "+cur + " has " +d + " divisors")
+		    		if (d > required) cur else triangle(cur+next, next+1)
+		      }
+		    
+		    triangle(1, 2)
+		  }
+	    
+		  val startTime = System.currentTimeMillis()
+		  println( "Triangle number with over 500 divisors equals " + problem12(500) )
+		  val endTime = System.currentTimeMillis()
+	      val dur = endTime - startTime
+	      println(dur + " msecs")
+	  }
+	  
+	  main_problem12
 	  
 	  
 }
