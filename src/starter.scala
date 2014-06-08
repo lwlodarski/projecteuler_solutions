@@ -7,7 +7,7 @@ object starter extends App {
 	    def problemImpl(cur: Long, primes: List[Long]) : List[Long] = 
 	      if (cur>=max) primes else
 	        if (isPrime(cur, primes, Math.sqrt(cur).toLong)) {
-	          problemImpl(cur+1, cur :: primes)
+	          problemImpl(cur+1, primes :+ cur)
 	        } else problemImpl(cur+1, primes)
 	        
 	    def sumAll(list: List[Long], result:Long) : Long = if (list.isEmpty) result else sumAll(list.tail, result + list.head)
