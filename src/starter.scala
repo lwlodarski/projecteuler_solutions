@@ -1,5 +1,5 @@
 object starter extends App {
-
+  
 	  //sum of all prime number less than max
 	  def problem10(max: Long) : Long = {
 	    def isPrime(no: Long, primes: List[Long], sqr: Long) : Boolean = if (primes.isEmpty || primes.head>sqr) true else if (no % primes.head==0) false else isPrime(no, primes.tail, sqr)
@@ -18,6 +18,10 @@ object starter extends App {
 	  }
 	  
 	  val max = 2000000
+	  val startTime = System.currentTimeMillis()
 	  println( "Sum of all primes less then " + max + " equals " + problem10( max) )
+	  val endTime = System.currentTimeMillis()
+      val dur = endTime - startTime
+      println(dur + " msecs")
 	  
 }
