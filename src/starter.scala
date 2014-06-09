@@ -175,7 +175,41 @@ object starter extends App {
 	      println(dur + " msecs")
 	  }
 	  
-	  main_problem13
+	  def main_problem14 = {
+	    
+	      def next(no:Long) : Long = if (no%2==0) no/2 else 3*no+1
+	      def gen(no:Long) : String = if (no==1) "1" else no + " -> " +gen(next(no))
+	    
+		  def length(no:Long) : Long = {
+	    		def impl(no:Long, result:Long) : Long =
+	    		{
+	    		  if (no==1) result else impl(next(no), result+1)
+	    		}
+	    		impl(no, 0)
+		  }
+	      
+	      def maxLongPairs(a:(Long, Long), b:(Long, Long)) : (Long, Long) = if (a._1>b._1) a else b
+	      
+	      def problem14(max:Long) : Long = {
+	        def impl(cur:Long, result:(Long, Long)): (Long, Long) = 
+	          {
+	        		//println(cur + ": " + length(cur) + " = " + result)
+	        		if (cur>=max) result else impl(cur+1, maxLongPairs(result, (length(cur), cur)))
+	          }
+	        
+	        impl(1, (0, 0))._2
+	      }
+	    
+	      val startTime = System.currentTimeMillis()
+		  val limit = 1000000
+		  val result = problem14(limit)
+		  println( "Longest sequence within range (1, "+limit+") equals " + length(result) + " for number " + result )
+		  val endTime = System.currentTimeMillis()
+	      val dur = endTime - startTime
+	      println(dur + " msecs")
+	  }
+	  
+	  main_problem14
 	  
 	  
 }
