@@ -282,7 +282,51 @@ object starter extends App {
 	  }
 	  
 	  
-	  main_problem16
+	  def main_problem17 = {
+	      
+	    def numbers = List("one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen")
+	    def tenths = List("twenty", "thrity", "forty", "fifty", "sixty", "seventy", "eighty", "ninety")
+	    def writeNumber(no:Int) : String = {
+	      if (no<20)
+	        numbers(no-1)
+	      else
+	      if (no<100 && no%10>0)
+	        tenths(no/10-2) + numbers(no%10-1)
+	      else
+	      if (no<100 && no%10==0)
+	        tenths(no/10-2)
+	      else
+	      if (no<1000 && no%100>0)
+	        numbers(no/100-1) + "hundred" + "and"+writeNumber(no%100)
+	      else
+	      if (no<1000 && no%100==0)
+	        numbers(no/100-1) + "hundred"
+	      else
+	        "onethousand"
+	    }
+	        
+	    def calc(no:Int) : Long = {
+	      //println(writeNumber(no) +  " len = " + writeNumber(no).length)
+	      writeNumber(no).length
+	    }
+	    def problem17(limit:Int, result:Long) : Long = {
+	    	if (limit==0) result else problem17(limit-1, result+calc(limit))
+	    } 
+	    
+	    def check(no:Int) : String = no + " - " + writeNumber(no) + " = " + writeNumber(no).length 
+	    
+	      val startTime = System.currentTimeMillis()
+		  
+		  val result = problem17(1000, 0)
+		  println( "Result: " + result )
+		  val endTime = System.currentTimeMillis()
+	      val dur = endTime - startTime
+	      println(dur + " msecs")
+	      //println(check(342))
+	  }
+	  
+	  
+	  main_problem17
 	  
 	  
 }
