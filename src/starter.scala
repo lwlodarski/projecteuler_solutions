@@ -209,7 +209,38 @@ object starter extends App {
 	      println(dur + " msecs")
 	  }
 	  
-	  main_problem14
+	  def main_problem15 = {
+	      
+	    def problem15(w: Int, h: Int) : Long = {
+	      val start = List[Long](3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22)
+	      def impl(x: Int, y:Int, current:List[Long], prev:List[Long]): Long = 
+	        {
+	    		  if (y==h)
+	    		  {
+	    		    if (x==w-1) {
+	    		      current.head
+	    		  	} else {
+	    		      impl(x+1, 1, x+3 :: Nil, current.reverse.tail)
+	    		  	}
+	    		  } else {
+	    		    impl(x, y+1, (prev.head+current.head) :: current, prev.tail)
+	    		  }
+	        }
+	      
+	      impl(1, 1, 3 :: Nil, start)
+	    } 
+	    
+	      val startTime = System.currentTimeMillis()
+		  
+		  val result = problem15(20, 20)
+		  println( "Result: " + result )
+		  val endTime = System.currentTimeMillis()
+	      val dur = endTime - startTime
+	      println(dur + " msecs")
+	  }
+	  
+	  
+	  main_problem15
 	  
 	  
 }
