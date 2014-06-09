@@ -106,13 +106,6 @@ object starter extends App {
 		    		    genPrimes(no+1, primes)
 		    		val newPrimes = genPrimes(maxChecked, primes)
 		    		val d = divisors(cur, newPrimes._2, 1, 1, 1, 1 :: Nil)
-		    		//val brute  = divisorsBruteForce(cur, 1)
-		    		//if (brute!=d._1)
-		    		//{
-		    		//  println(d._2)
-		    		//  throw new Exception("I'm wrong "+d._1 + " vs BF " + brute)
-		    		//}
-		    		//println("triangle no "+cur + " has " +d._1 + " divisors")
 		    		if (d._1 > required) cur else triangle(cur+next, next+1, newPrimes._1, newPrimes._2)
 		      }
 		    
@@ -122,19 +115,67 @@ object starter extends App {
 		  val startTime = System.currentTimeMillis()
 		  val max = 500
 		  val fastMethod = fast12(max)
-		  //val bruteForceMethod = problem12(max)
-		  //if (fastMethod != bruteForceMethod)
-		  //  println("Error")
-		  //else
-		    println("OK")
 		  println( "Triangle number with over 500 divisors equals " + fastMethod )
-		  //println( "Triangle number with over 500 divisors equals " + bruteForceMethod )
 		  val endTime = System.currentTimeMillis()
 	      val dur = endTime - startTime
 	      println(dur + " msecs")
 	  }
 	  
-	  main_problem12
+	  def main_problem13 = {
+	      def reverseAll(data: List[ List[Int] ]) : List[ List[Int] ] = 
+	        if (data.isEmpty) 
+	          Nil 
+	        else 
+	          data.head.reverse :: reverseAll(data.tail) 
+	      
+		  def problem13(cols: Int, data: List[ List[Int]]): String = {
+		      val newData = reverseAll(data)
+		      
+		      
+		
+			  def makeSum(data: List[ List[Int] ]) : Int = 
+		    	  if (data.isEmpty || data.head.isEmpty) 0 else data.head.head + makeSum(data.tail)
+		    	  
+		      def isEmpty(data: List[ List[Int] ]) : Boolean = 
+		    	  if (data.isEmpty) true else if (data.head.isEmpty) isEmpty(data.tail) else false
+		      def cut(data: List[ List[Int] ]) : List[ List[Int] ] = 
+		    	  if (data.isEmpty) 
+		    	    Nil 
+		    	  else 
+		    	  if (data.head.isEmpty)
+		    	    (0 :: Nil) :: cut(data.tail)
+		    	  else
+		    	  (data.head.tail) :: cut(data.tail)
+			   
+			    def impl(data: List[ List[Int] ], memory:Int) : List[Int] =
+			    {
+			    	    if (isEmpty(data))
+			    	    {
+			    	      if (memory==0) 
+			    	    	Nil
+			    	      else
+			    	    	memory%10 :: impl(data, memory/10)  
+			    	    } else {
+			    	    	val s= makeSum(data)
+			    	    	(s + memory) % 10 :: impl( cut(data), (s+memory)/10)
+			    	    }
+			    }
+		      
+		      def take(data: List[Int], left: Int) : String = if (data.isEmpty || left==0) "" else data.head.toString() + take(data.tail, left-1) 
+		    
+		      take(impl(newData, 0).reverse, cols)
+		  }
+	    
+	      val startTime = System.currentTimeMillis()
+		  val max = 10
+		  val result = problem13(max, Problem13.Data)
+		  println( "First "+max+" digits equals " + result )
+		  val endTime = System.currentTimeMillis()
+	      val dur = endTime - startTime
+	      println(dur + " msecs")
+	  }
+	  
+	  main_problem13
 	  
 	  
 }
