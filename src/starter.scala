@@ -60,21 +60,75 @@ object starter extends App {
 	  }
 	  
 	  def main_problem12 = {
+	      def divisorsBruteForce(no:Long, cur:Long) : Int = if (cur>=no) 1 else if (no%cur==0) divisorsBruteForce(no, cur+1) +1 else divisorsBruteForce(no, cur+1)
 		  def problem12(required:Int): Long = {
-		    def divisors(no:Long, cur:Long) : Int = if (cur>no/2) 2 else if (no%cur==0) divisors(no, cur+1) +1 else divisors(no, cur+1)
 		    
 		    def triangle(cur:Long, next:Long) : Long = 
 		      {
-		    		val d = divisors(cur, 2)
+		    		val d = divisorsBruteForce(cur, 2)
 		    		println("triangle no "+cur + " has " +d + " divisors")
 		    		if (d > required) cur else triangle(cur+next, next+1)
 		      }
 		    
 		    triangle(1, 2)
 		  }
+		  
+		  def fast12(required:Int): Long = {
+		    def isPrime(no: Long, primes: List[Long], sqr: Long) : Boolean = if (primes.isEmpty || primes.head>sqr) true else if (no % primes.head==0) false else isPrime(no, primes.tail, sqr)
+		    
+		    def divisors(no:Long, primes:List[Long], result:Int, prev:Int, level:Int, factors:List[Long]) : (Int, List[Long]) =
+		    {
+		      if (no==1)
+		        (result, factors)
+		      else
+		      if (no%primes.head==0)
+		      {
+		        if (factors.isEmpty==false && primes.head==factors.head)
+		        {
+		        	divisors(no/primes.head, primes, result + prev, prev, level, primes.head :: factors)
+		        } else {
+		          divisors(no/primes.head, primes, result *2, result, level, primes.head :: factors)
+		        }
+		      } else
+		        divisors(no, primes.tail, result , prev, level+1, factors)
+		    }
+		        
+		    
+		    def triangle(cur:Long, next:Long, maxChecked:Long, primes: List[Long]) : Long = 
+		      {
+		    		def genPrimes(no: Long, primes:List[Long]) :(Long, List[Long]) = 
+		    		  if (no>cur) 
+		    		    (no, primes) 
+		    		  else 
+		    		  if (isPrime(no, primes, Math.sqrt(no).toLong)) 
+		    		    genPrimes(no+1, primes :+ no)
+		    		  else 
+		    		    genPrimes(no+1, primes)
+		    		val newPrimes = genPrimes(maxChecked, primes)
+		    		val d = divisors(cur, newPrimes._2, 1, 1, 1, 1 :: Nil)
+		    		//val brute  = divisorsBruteForce(cur, 1)
+		    		//if (brute!=d._1)
+		    		//{
+		    		//  println(d._2)
+		    		//  throw new Exception("I'm wrong "+d._1 + " vs BF " + brute)
+		    		//}
+		    		//println("triangle no "+cur + " has " +d._1 + " divisors")
+		    		if (d._1 > required) cur else triangle(cur+next, next+1, newPrimes._1, newPrimes._2)
+		      }
+		    
+		    triangle(1, 2, 3, 2 :: Nil)
+		  }
 	    
 		  val startTime = System.currentTimeMillis()
-		  println( "Triangle number with over 500 divisors equals " + problem12(500) )
+		  val max = 500
+		  val fastMethod = fast12(max)
+		  //val bruteForceMethod = problem12(max)
+		  //if (fastMethod != bruteForceMethod)
+		  //  println("Error")
+		  //else
+		    println("OK")
+		  println( "Triangle number with over 500 divisors equals " + fastMethod )
+		  //println( "Triangle number with over 500 divisors equals " + bruteForceMethod )
 		  val endTime = System.currentTimeMillis()
 	      val dur = endTime - startTime
 	      println(dur + " msecs")
