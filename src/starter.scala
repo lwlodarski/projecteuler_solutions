@@ -240,7 +240,49 @@ object starter extends App {
 	  }
 	  
 	  
-	  main_problem15
+	  def main_problem16 = {
+	      
+	    def problem16(limit:Int) : Long = {
+	      def mul(no:List[Int], el:Int, memory:Int, result:List[Int]) : List[Int]= 
+	      {
+	        //println("D1:"+ no)
+	        //println("D2:"+ el)
+	        //println("D3:"+ memory)
+	        //println("D4:"+ result)
+	        if (no.isEmpty)
+	        {
+	          if (memory>0)
+	            mul(no, el, memory/10, memory%10 :: result)
+	          else
+	        	result
+	        }else {
+		        val r = el*(no.head)+memory
+		        //println("reszta:" +r)
+		        if (no.isEmpty) result else mul(no.tail, el, r/10, r%10 :: result)
+	        }
+	      }
+	      
+	      def power(no:List[Int], left:Int) : List[Int]= {
+	        //println(no)
+	        if (left==0) no else power(mul(no.reverse, 2, 0, Nil), left-1)
+	      }
+	      
+	      def sum(lista: List[Int], result:Long) : Long = if (lista.isEmpty) result else sum(lista.tail, result+lista.head)
+	        
+	      sum(power(1 :: Nil, limit), 0)
+	    } 
+	    
+	      val startTime = System.currentTimeMillis()
+		  
+		  val result = problem16(1000)
+		  println( "Result: " + result )
+		  val endTime = System.currentTimeMillis()
+	      val dur = endTime - startTime
+	      println(dur + " msecs")
+	  }
+	  
+	  
+	  main_problem16
 	  
 	  
 }
