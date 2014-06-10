@@ -408,7 +408,77 @@ object starter extends App {
 	      println(dur + " msecs")
 	  }
 	  
-	  main_problem19
+	  def main_problem20 = {
+	    val startTime = System.currentTimeMillis()
+	      def add(a: List[Int], b:List[Int]) : List[Int] = {
+	    	def addImpl(a:List[Int], b:List[Int], memory:Int, result:List[Int]) : List[Int ]=
+	    	  if (a.isEmpty && b.isEmpty && memory==0)
+	    	    result
+	    	  else
+	    	  if (a.isEmpty && b.isEmpty && memory>0)
+	    	    addImpl(a, b, memory/10, memory%10 :: result)  
+	    	  else
+	    	  if (a.isEmpty)
+	    	    addImpl(a, b.tail, (b.head+memory)/10, (b.head+memory)%10 :: result)
+	    	  else
+	    	  if (b.isEmpty)
+	    	    addImpl(a.tail, b, (a.head+memory)/10, (a.head+memory)%10 :: result)
+	    	  else
+	    	    addImpl(a.tail, b.tail, (a.head+b.head+memory)/10, (a.head+b.head+memory)%10 :: result)
+	    	    
+	    	addImpl(a.reverse, b.reverse, 0, Nil)
+	      }
+	    
+	      def mulInt(a:List[Int], b:Int) : List[Int] =
+	      {
+	    	def mulIntImpl(a:List[Int], b:Int, memory:Int, result:List[Int]) : List[Int] =
+	    	  if (a.isEmpty && memory==0)
+	    	    result
+	    	  else
+	    	  if (a.isEmpty && memory>0)
+	    	    mulIntImpl(a, b, memory/10, memory%10 :: result)
+	    	  else
+	    	    mulIntImpl(a.tail, b, (a.head*b+memory)/10, (a.head*b+memory)%10 :: result)
+	    	    
+	    	mulIntImpl(a.reverse, b, 0, Nil)
+	      }
+	      
+	      def mul(a:List[Int], b:List[Int]) : List[Int] = {
+	        def mulImpl(a:List[Int], b:List[Int], zeros: List[Int], result: List[Int]) : List[Int] = {
+	        	if (b.isEmpty)
+	        	  result
+	        	else
+	        	  mulImpl(a, b.tail, 0 :: zeros, add(result, mulInt(a.reverse, b.head) ::: zeros))
+	        }
+	        
+	        mulImpl(a.reverse, b.reverse, Nil, Nil)
+	      }
+	      
+	      def factorial(left:Int) : List[Int] = {
+	        def factorialImpl(no:List[Int], left:Int, result: List[Int]) : List[Int] = {
+	          if (left==0)
+	            result
+	          else
+	        	  factorialImpl(add(no, List(1)), left-1, mul(result, no))
+	        }
+	        
+	        factorialImpl(List(1), left, List(1))
+	      }
+	      
+	      def sum(lista: List[Int], result:Long) : Long = if (lista.isEmpty) result else sum(lista.tail, result+lista.head)
+	        
+	      def problem20 = sum(factorial(100), 0)
+	      
+	      
+	      
+		  val result = problem20
+		  val endTime = System.currentTimeMillis()
+		  println( "Result: " + result )
+	      val dur = endTime - startTime
+	      println(dur + " msecs")
+	  }
+	  
+	  main_problem20
 	  
 	  
 }
