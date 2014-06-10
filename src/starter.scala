@@ -325,8 +325,46 @@ object starter extends App {
 	      //println(check(342))
 	  }
 	  
+	  def main_problem18_and_67 = {
+	    val startTime = System.currentTimeMillis()
+		
+	      def problem18(data: List[ List[Long]]) : Long = {
+	    		def rData = data.reverse
+	    		
+	    		def max(a:Long, b:Long) : Long = if(a>b) a else b
+	    		
+	    		def makeNewLayer(last:List[Long], prev:List[Long], result:List[Long]) : List[Long] = {
+	    		  if (prev.isEmpty) 
+	    		    result.reverse 
+	    		  else 
+	    		    makeNewLayer(last.tail, prev.tail, prev.head + max(last.head, last.tail.head) :: result)
+	    		}
+	    		
+	    		def impl(data: List[List[Long]]) : Long = {
+	    		  if (data.tail.isEmpty) data.head.head else
+	    		    impl( makeNewLayer(data.head, data.tail.head, Nil) :: data.tail.tail)
+	    		}
+	    		
+	    		impl(rData)
+	    	}
+	    
+		  val result = problem18(Problem18.Data)
+		  println( "Result: " + result )
+		  val endTime = System.currentTimeMillis()
+	      val dur = endTime - startTime
+	      println(dur + " msecs")
+		  
+		  val startTime2 = System.currentTimeMillis()
+		  val result2 = problem18(Problem67.Data)
+		  println( "Result: " + result2 )
+		  val endTime2 = System.currentTimeMillis()
+	      val dur2 = endTime2 - startTime2
+	      println(dur2 + " msecs")
+	      //println(check(342))
+	  }
 	  
-	  main_problem17
+	  
+	  main_problem18_and_67
 	  
 	  
 }
