@@ -363,8 +363,52 @@ object starter extends App {
 	      //println(check(342))
 	  }
 	  
+	  def main_problem19 = {
+	      
+	      def monthsWith31Days = List(1,3,5,7,8,10,12)
+	      
+	      def isInList(no:Int, list:List[Int]) : Boolean = if (list.isEmpty) false else if (list.head==no) true else isInList(no, list.tail) 
+	      
+	     
+	      class LData(y:Int, m:Int, d:Int, dow:Int)
+	      {
+	        def Year: Int = y
+	        def Month: Int = m
+	        def Day: Int = d
+	        def DayOfWeek = dow
+	        
+	        def maxDays: Int = if (isInList(m, monthsWith31Days)) 31 else if (m!=2) 30 else if (y%4==0 && (y%100!=0 || y%400==0)) 29 else 28
+	        
+	        
+	        def Next : LData = 
+	          if (m==12 && d==31) 
+	            new LData(y+1,1,1,(dow+1)%7) 
+	          else 
+	          if (d<maxDays)
+	            new LData(y, m, d+1, (dow+1)%7)
+	          else
+	            new LData(y, m+1, 1, (dow+1)%7)
+	        
+	        def equals(what:LData) : Boolean = what.Year==y && what.Month==m && what.Day==d
+	        def greater(what:LData) : Boolean = (Year>what.Year || Year==what.Year && Month>what.Month || Year==what.Year && Month==what.Month && Day > what.Day)
+	      }
+	      
+	      val startTime = System.currentTimeMillis()
+	      def problem19(start:LData, from:LData, to:LData, check: LData=>Boolean, result:Int): Int = {
+	        if (start.greater(to)) result else
+	        if ((start.greater(from) || start.equals(from)) && check(start))
+	          problem19(start.Next, from, to, check, result+1)
+	        else
+	          problem19(start.Next, from, to, check, result)
+	      }
+		  val result = problem19(new LData(1900,1,1,0), new LData(1901,1,1,-1), new LData(2000,12,31,-1), (n:LData) => n.Day==1 && n.DayOfWeek==6, 0)
+				  val endTime = System.currentTimeMillis()
+		  println( "Result: " + result )
+	      val dur = endTime - startTime
+	      println(dur + " msecs")
+	  }
 	  
-	  main_problem18_and_67
+	  main_problem19
 	  
 	  
 }
